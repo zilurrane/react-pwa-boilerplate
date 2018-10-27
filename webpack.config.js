@@ -53,6 +53,11 @@ module.exports = {
     ]
   },
   devServer: {
-    port: 5555
+    port: 5555,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:7777'
+      }
+    }
   }
 }
