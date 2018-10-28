@@ -13,6 +13,14 @@ class App extends Component {
         return data
     }
 
+    displayNotification(notificationMessage) {
+        if (Notification.permission == 'granted') {
+            navigator.serviceWorker.getRegistration().then(function (reg) {
+                reg.showNotification(notificationMessage);
+            });
+        }
+    }
+
     async componentDidMount() {
         this.setState({ quotes: await this.getQuotes() })
     }
@@ -30,7 +38,14 @@ class App extends Component {
                         <div className="col">
                             <div className="card bg-dark shadow-sm">
                                 <div className="card-body">
-                                    {quote.text}
+                                    <div className="row">
+                                        <div className="col-sm-10 p-1">
+                                            <h6>{quote.text}</h6>
+                                        </div>
+                                        <div className="col-sm-2">
+                                            <button className="btn btn-default" onClick={() => this.displayNotification(quote.text)}>Notify</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
