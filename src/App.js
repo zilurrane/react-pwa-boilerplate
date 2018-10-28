@@ -8,7 +8,7 @@ class App extends Component {
     }
 
     async getQuotes() {
-        const { data } = await axios.get('/api/quotes')
+        const { data } = await axios.get('https://zreact-pwa-api.cfapps.io/api/quotes')
         console.log(data)
         return data
     }
@@ -16,7 +16,15 @@ class App extends Component {
     displayNotification(notificationMessage) {
         if (Notification.permission == 'granted') {
             navigator.serviceWorker.getRegistration().then(function (reg) {
-                reg.showNotification(notificationMessage);
+                reg.showNotification(notificationMessage, {
+                    icon: 'favicon144.png',
+                    vibrate: [100, 50, 100],
+                    data: {
+                        dateOfArrival: Date.now(),
+                        primaryKey: 1
+                    }
+                }
+                );
             });
         }
     }
@@ -28,8 +36,12 @@ class App extends Component {
     render() {
         return <div className="container">
             <div className="row">
-                <div className="col text-center">
+                <div className="col text-center mt-5">
                     <h1>React PWA</h1>
+                    <h6>
+                        v1.0
+                    </h6>
+                    <h1 className="text-danger">&hearts;</h1>
                 </div>
             </div>
             {
