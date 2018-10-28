@@ -8,7 +8,8 @@ const cleanWebpackPlugin = new CleanWebpackPlugin(
 )
 
 const copyWebpackPlugin = new CopyWebpackPlugin([
-  { from: 'public/assets' }
+  { from: 'public/assets' },
+  { from: 'manifest.yml' }
 ])
 
 const htmlWebpackPlugin = new HtmlWebPackPlugin({

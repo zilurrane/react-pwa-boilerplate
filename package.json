@@ -4,7 +4,8 @@
   "description": "React PWA POC",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --open",
+    "start": "concurrently \"cd api && node index.js\" \"npm run ui\"",
+    "ui": "webpack-dev-server --mode development --open",
     "build": "webpack --mode production",
     "lint": "standard \"src/**/*.js\"",
     "code-format": "standard \"src/**/*.js\" --fix"
@@ -29,6 +30,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^0.1.19",
+    "concurrently": "^4.0.1",
     "copy-webpack-plugin": "^4.5.4",
     "css-loader": "^1.0.0",
     "file-loader": "^2.0.0",
