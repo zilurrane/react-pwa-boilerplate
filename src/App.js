@@ -41,6 +41,7 @@ class App extends Component {
 
     captureImage() {
         const context = canvas.getContext('2d')
+        console.log("f")
         context.drawImage(this.player, 0, 0, this.canvas.width, this.canvas.height)
     }
 
@@ -80,18 +81,18 @@ class App extends Component {
                     <div className='card bg-dark shadow-sm'>
                         <div className='card-body'>
                             <div className='row'>
-                                <div className='col text-center'>
-                                    <video id='player' ref={player => this.player = player} className='col-md-12' autoPlay />
+                                <div className='col-sm-12 text-center'>
+                                    <video style={{height: '100%', width: '100%' }} id='player' ref={player => this.player = player} autoPlay />
                                 </div>
                             </div>
                             <div className='row'>
-                                <div className='col'>
+                                <div className='col-sm-12'>
                                     <button onClick={() => this.captureImage()} className='btn btn-default btn-block' id='capture'>Capture</button>
                                 </div>
                             </div>
                             <div className='row'>
-                                <div className='col text-center'>
-                                    <canvas id='canvas' ref={canvas => this.canvas = canvas} className='col-md-12' />
+                                <div className='col-sm-12 text-center'>
+                                    <canvas style={{height: '100%', width: '100%' }} id='canvas' ref={canvas => this.canvas = canvas} />
                                 </div>
                             </div>
                         </div>
