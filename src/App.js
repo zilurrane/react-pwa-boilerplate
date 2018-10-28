@@ -45,6 +45,16 @@ class App extends Component {
         context.drawImage(this.player, 0, 0, this.canvas.width, this.canvas.height)
     }
 
+    share() {
+        var text = 'Hey Buddy, Have a look at this cool React PWA';
+        if ('share' in navigator) {
+            navigator.share({
+                title: document.title,
+                text: text,
+                url: location.href,
+            })
+        }
+    }
     render() {
         return <div className='container'>
             <div className='row'>
@@ -52,8 +62,9 @@ class App extends Component {
                     <h1>React PWA</h1>
                     <h6>
                         v1.1
-          </h6>
+                    </h6>
                     <h1 className='text-danger'>&hearts;</h1>
+                    {'share' in navigator && <button class="btn btn-default btn-block" onClick={() => this.share()}>Share</button>}
                 </div>
             </div>
             {
@@ -82,7 +93,7 @@ class App extends Component {
                         <div className='card-body'>
                             <div className='row'>
                                 <div className='col-sm-12 text-center'>
-                                    <video style={{height: '100%', width: '100%' }} id='player' ref={player => this.player = player} autoPlay />
+                                    <video style={{ height: '100%', width: '100%' }} id='player' ref={player => this.player = player} autoPlay />
                                 </div>
                             </div>
                             <div className='row'>
@@ -92,7 +103,7 @@ class App extends Component {
                             </div>
                             <div className='row'>
                                 <div className='col-sm-12 text-center'>
-                                    <canvas style={{height: '100%', width: '100%' }} id='canvas' ref={canvas => this.canvas = canvas} />
+                                    <canvas style={{ height: '100%', width: '100%' }} id='canvas' ref={canvas => this.canvas = canvas} />
                                 </div>
                             </div>
                         </div>
