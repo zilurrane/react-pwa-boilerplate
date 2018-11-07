@@ -4,13 +4,33 @@ import axios from 'axios'
 class App extends Component {
     constructor(props) {
         super(props)
-        this.state = { quotes: [] }
+        this.state = { quotes: [], isCameraEnabled: false, isNotificationsEnabled: false }
     }
 
     async getQuotes() {
-        const { data } = await axios.get('https://zreact-pwa-api.cfapps.io/api/quotes')
+        const { data } = await axios.get('http://localhost:7777/api/quotes')
         console.log(data)
         return data
+    }
+
+    enableNotifications() {
+        Notification.requestPermission()
+            .then((status) => {
+                console.log('Notification permission status:', status)
+                if (status === 'granted') {
+                    this.setState({ isNotificationsEnabled: true })
+                }
+            })
+    }
+
+    enableCamera() {
+        navigator.mediaDevices.getUserMedia({
+            video: true
+        })
+            .then((stream) => {
+                this.setState({ isCameraEnabled: true })
+                this.player.srcObject = stream
+            })
     }
 
     displayNotification(notificationMessage) {
@@ -31,12 +51,6 @@ class App extends Component {
 
     async componentDidMount() {
         this.setState({ quotes: await this.getQuotes() })
-        navigator.mediaDevices.getUserMedia({
-            video: true
-        })
-            .then((stream) => {
-                this.player.srcObject = stream
-            })
     }
 
     captureImage() {
@@ -72,33 +86,35 @@ class App extends Component {
                 <div className="card bg-dark shadow-sm">
                     <div className="card-header" id="headingOne">
                         <h5 className="mb-0">
-                            <button className="btn btn-dark btn-block" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                <b>Quotes</b>
+                            <button onClick={() => this.enableNotifications()} className="btn btn-dark btn-block" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <b>Notifications</b>
                             </button>
                         </h5>
                     </div>
 
-                    <div id="collapseOne" className="collapse show" aria-labelledby="headingOne" data-parent="#accordionPWA">
+                    <div id="collapseOne" className="collapse" aria-labelledby="headingOne" data-parent="#accordionPWA">
                         <div className="card-body">
                             {
-                                this.state.quotes.map((quote, key) => {
-                                    return <div key={key} className='row text-center'>
-                                        <div className='col'>
-                                            <div className='card bg-dark shadow-sm'>
-                                                <div className='card-body'>
-                                                    <div className='row'>
-                                                        <div className='col-sm-10 p-1'>
-                                                            <h6>{quote.text}</h6>
-                                                        </div>
-                                                        <div className='col-sm-2'>
-                                                            <button className='btn btn-default' onClick={() => this.displayNotification(quote.text)}>Notify</button>
+                                this.state.isNotificationsEnabled ?
+                                    this.state.quotes.map((quote, key) => {
+                                        return <div key={key} className='row text-center'>
+                                            <div className='col'>
+                                                <div className='card bg-dark shadow-sm'>
+                                                    <div className='card-body'>
+                                                        <div className='row'>
+                                                            <div className='col-sm-10 p-1'>
+                                                                <h6>{quote.text}</h6>
+                                                            </div>
+                                                            <div className='col-sm-2'>
+                                                                <button className='btn btn-default' onClick={() => this.displayNotification(quote.text)}>Notify</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                })
+                                    }) :
+                                    "Please enable notification to use this feature"
                             }
 
                         </div>
@@ -107,36 +123,41 @@ class App extends Component {
                 <div className="card bg-dark shadow-sm">
                     <div className="card-header" id="headingTwo">
                         <h5 className="mb-0">
-                            <button className="btn btn-dark btn-block collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <button onClick={() => this.enableCamera()} className="btn btn-dark btn-block collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                 <b>Camera</b>
                             </button>
                         </h5>
                     </div>
                     <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionPWA">
                         <div className="card-body">
-                            <div className='row'>
-                                <div className='col'>
-                                    <div className='card bg-dark shadow-sm'>
-                                        <div className='card-body'>
-                                            <div className='row'>
-                                                <div className='col-sm-12 text-center'>
-                                                    <video style={{ height: '100%', width: '100%' }} id='player' ref={player => this.player = player} autoPlay />
-                                                </div>
-                                            </div>
-                                            <div className='row'>
-                                                <div className='col-sm-12'>
-                                                    <button onClick={() => this.captureImage()} className='btn btn-default btn-block' id='capture'>Capture</button>
-                                                </div>
-                                            </div>
-                                            <div className='row'>
-                                                <div className='col-sm-12 text-center'>
-                                                    <canvas style={{ height: '100%', width: '100%' }} id='canvas' ref={canvas => this.canvas = canvas} />
+                            {
+                                this.state.isCameraEnabled ?
+                                    <div className='row'>
+                                        <div className='col'>
+                                            <div className='card bg-dark shadow-sm'>
+                                                <div className='card-body'>
+                                                    <div className='row'>
+                                                        <div className='col-sm-12 text-center'>
+                                                            <video style={{ height: '100%', width: '100%' }} id='player' ref={player => this.player = player} autoPlay />
+                                                        </div>
+                                                    </div>
+                                                    <div className='row'>
+                                                        <div className='col-sm-12'>
+                                                            <button onClick={() => this.captureImage()} className='btn btn-default btn-block' id='capture'>Capture</button>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row'>
+                                                        <div className='col-sm-12 text-center'>
+                                                            <canvas style={{ height: '100%', width: '100%' }} id='canvas' ref={canvas => this.canvas = canvas} />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                    :
+                                    "Please enable camera to use this feature"
+                            }
                         </div>
                     </div>
                 </div>
