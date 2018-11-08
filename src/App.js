@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { askForPermissioToReceiveNotifications } from './push-notification'
 
 class App extends Component {
     constructor(props) {
@@ -79,6 +80,7 @@ class App extends Component {
                     </h6>
                     <h1 className='text-danger'>&hearts;</h1>
                     {'share' in navigator && <button className="btn btn-default btn-block" onClick={() => this.share()}>Share</button>}
+                    <button className="btn btn-default btn-block" onClick={() => askForPermissioToReceiveNotifications()}>Enable FCM</button>
                 </div>
             </div>
 
