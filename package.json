@@ -8,7 +8,9 @@
     "ui": "webpack-dev-server --mode development --open",
     "build": "webpack --mode production",
     "lint": "standard \"src/**/*.js\"",
-    "code-format": "standard \"src/**/*.js\" --fix"
+    "code-format": "standard \"src/**/*.js\" --fix",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -44,6 +46,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "react": "^16.6.0",
-    "react-dom": "^16.6.0"
-  }
+    "react-dom": "^16.6.0",
+    "snyk": "^1.161.1"
+  },
+  "snyk": true
 }
